@@ -20,7 +20,7 @@ def load_model(model_path):
     return model
 
 
-model_path = os.path.join(os.path.dirname(__file__), 'naive_bayes_model.pkl')
+model_path = os.path.join(os.path.dirname(__file__), 'random_forest_model.joblib')
 model = load_model(model_path)
 
 
@@ -52,10 +52,11 @@ def classify_image():
     img_array = preprocess_image(img_file)
     if img_array is None:
         return jsonify({
-                           'error': 'Could not process the uploaded file. Make sure it is a valid image.'}), 400
+            'error': 'Could not process the uploaded file. Make sure it is a valid image.'}), 400
 
     # Predict the class using the Naive Bayes model
     predicted = model.predict([img_array])[0]
+    print(predicted)
     predicted_label = 'Fireworks' if predicted == 1 else 'Non-Fireworks'
 
     return jsonify({'classification': predicted_label})
