@@ -1,0 +1,7 @@
+{
+    "peers": [
+        "verteilte_systeme-flask1-1",
+        "verteilte_systeme-flask2-1",
+        "verteilte_systeme-flask3-1"
+    ]
+}

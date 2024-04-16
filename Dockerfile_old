@@ -1,0 +1,37 @@
+# Start from the Ubuntu image
+FROM ubuntu:20.04
+
+# Avoiding user interaction with tzdata
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update and install Python and pip
+RUN apt-get update && apt-get install -y python3-pip python3-dev vim \
+    iputils-ping \
+    curl
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements file into the container
+COPY requirements.txt /app/
+
+# Install the Python dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application
+COPY .. /app
+
+COPY peers.json /app/peers.json
+COPY peers_docker.json /app/peers_docker.json
+
+# Install Python dependencies
+# Ensure Flask, torch, torchvision, Pillow (for PIL), and psutil are installed
+RUN pip install --no-cache-dir Flask torch torchvision Pillow psutil
+
+# Make port 5000 available to the world outside this container
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Command to run the app
+CMD ["flask", "run", "--host=0.0.0.0"]
