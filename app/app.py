@@ -20,7 +20,7 @@ def load_model(model_path):
     return model
 
 
-model_path = os.path.join(os.path.dirname(__file__), 'naive_bayes_model.joblib')
+model_path = os.path.join(os.path.dirname(__file__), 'naive_bayes_model.pkl')
 model = load_model(model_path)
 
 
