@@ -1,7 +1,0 @@
-{
-    "peers": [
-        "server-flask1-1",
-        "server-flask2-1",
-        "server-flask3-1"
-    ]
-}
