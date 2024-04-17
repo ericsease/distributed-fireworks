@@ -1,62 +1,19 @@
 version: '3.8'
 
 services:
-  flask1:
+  flask-app:
     build:
       context: ./
       dockerfile: Dockerfile
-    ports:
-      - "5001:1717"
     restart: unless-stopped
     environment:
       - FLASK_APP=app.py
       - FLASK_RUN_HOST=0.0.0.0
-      - USE_DOCKER_SERVICE_NAMES=true
-      - FLASK_ENV=production
-      - CPU_LOAD=85
-    networks:
-      - flask_network
-    volumes:
-      - ./app:/app
+      - USE_DOCKER_SERVICE_NAMES=false
+    network_mode: host
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
       interval: 10s
       timeout: 5s
       retries: 3
       start_period: 15s
-
-  flask2:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - "5002:1717"
-    environment:
-      - FLASK_APP=app.py
-      - FLASK_RUN_HOST=0.0.0.0
-      - USE_DOCKER_SERVICE_NAMES=true
-      - CPU_LOAD=40
-    networks:
-      - flask_network
-    volumes:
-      - ./app:/app
-
-  flask3:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - "5003:1717"
-    environment:
-      - FLASK_APP=app.py
-      - FLASK_RUN_HOST=0.0.0.0
-      - USE_DOCKER_SERVICE_NAMES=true
-      - CPU_LOAD=40
-    networks:
-      - flask_network
-    volumes:
-      - ./app:/app
-
-networks:
-  flask_network:
-    driver: bridge

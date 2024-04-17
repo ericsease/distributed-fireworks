@@ -91,28 +91,16 @@ def classify_image():
     return jsonify({'classification': predicted_label})
 
 
-# Production
-# def check_system_utilization():
-#     cpu = psutil.cpu_times_percent(interval=1)  # Collect CPU stats over 1 second
-#     load_avg = os.getloadavg()  # Get average system load over 1, 5, and 15 minutes
-#     io_wait = cpu.iowait  # Percent of time spent waiting for I/O
-#
-#     return {
-#         'cpu': cpu.system + cpu.user,  # System and user CPU time
-#         'iowait': io_wait,
-#         'load_1m': load_avg[0],  # 1-minute load average
-#         'ram': psutil.virtual_memory().percent
-#     }
-
-# Testing
 def check_system_utilization():
-    # Use an environment variable to set artificial load levels
-    cpu_load = float(os.getenv('CPU_LOAD', '50'))  # Default to 50 if not set
+    cpu = psutil.cpu_times_percent(interval=1)  # Collect CPU stats over 1 second
+    load_avg = os.getloadavg()  # Get average system load over 1, 5, and 15 minutes
+    io_wait = cpu.iowait  # Percent of time spent waiting for I/O
+
     return {
-        'cpu': cpu_load,
-        'ram': psutil.virtual_memory().percent,
-        'load_1m': os.getloadavg()[0],
-        'iowait': psutil.cpu_times_percent().iowait
+        'cpu': cpu.system + cpu.user,  # System and user CPU time
+        'iowait': io_wait,
+        'load_1m': load_avg[0],  # 1-minute load average
+        'ram': psutil.virtual_memory().percent
     }
 
 
@@ -138,7 +126,7 @@ def select_peer():
 
 
 def load_peers():
-    with open('peers_docker.json', 'r') as f:
+    with open('peers.json', 'r') as f:
         data = json.load(f)
     return data['peers']
 
@@ -159,7 +147,7 @@ def test_forward():
     if 'image' not in request.files:
         return jsonify({'error': 'No image file provided'}), 400
     file = request.files['image']
-    peer = "http://server-flask2-1:1717/classify"  # Assuming peer is set to handle /classify
+    peer = "http://192.168.1.23:1717/classify"
 
     try:
         # Prepare the file payload for HTTP POST
